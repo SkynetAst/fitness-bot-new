@@ -63,3 +63,14 @@ def delete_user(user_id: int) -> None:
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
         conn.commit()
+
+
+def add_food_entry(user_id: int, food_name: str, grams: float,
+                   calories: int, date: str) -> None:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            "INSERT INTO food_diary (user_id, food_name, grams, calories, date)"
+            " VALUES (?, ?, ?, ?, ?)",
+            (user_id, food_name, grams, calories, date),
+        )
+        conn.commit()
