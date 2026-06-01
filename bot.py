@@ -4,6 +4,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandle
 from database import init_db
 from onboarding import build_onboarding_handler
 from reset import cmd_reset, handle_reset_confirm, handle_reset_cancel
+from profile import cmd_profile
 
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -16,6 +17,7 @@ def main() -> None:
     app.add_handler(CommandHandler("reset", cmd_reset))
     app.add_handler(CallbackQueryHandler(handle_reset_confirm, pattern="^reset_confirm$"))
     app.add_handler(CallbackQueryHandler(handle_reset_cancel,  pattern="^reset_cancel$"))
+    app.add_handler(CommandHandler("profile", cmd_profile))
     app.run_polling()
 
 

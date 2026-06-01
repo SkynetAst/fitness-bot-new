@@ -7,7 +7,8 @@ from telegram.ext import (
     CallbackQueryHandler,
     filters,
 )
-from database import get_user, save_user
+from database import get_user, save_user, update_calories
+from kbzhu import calculate_kbzhu
 
 HEIGHT, WEIGHT, AGE, GENDER, GOAL = range(5)
 
@@ -100,14 +101,18 @@ async def finish_onboarding(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> i
     query = update.callback_query
     await query.answer()
     ud = ctx.user_data
+    user_id = update.effective_user.id
+    goal_str = _GOAL_MAP[query.data]
     save_user(
-        user_id=update.effective_user.id,
+        user_id=user_id,
         height=ud["height"],
         weight=ud["weight"],
         age=ud["age"],
         gender=ud["gender"],
-        goal=_GOAL_MAP[query.data],
+        goal=goal_str,
     )
+    kbzhu = calculate_kbzhu(ud["height"], ud["weight"], ud["age"], ud["gender"], goal_str)
+    update_calories(user_id, kbzhu["calories"])
     await query.edit_message_text(
         "Отлично! Твои данные сохранены.\n"
         "Напиши /profile чтобы увидеть свой профиль."

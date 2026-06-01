@@ -50,6 +50,15 @@ def save_user(user_id: int, height: float, weight: float,
         conn.commit()
 
 
+def update_calories(user_id: int, calories: int) -> None:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            "UPDATE users SET daily_calories = ? WHERE user_id = ?",
+            (calories, user_id),
+        )
+        conn.commit()
+
+
 def delete_user(user_id: int) -> None:
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
