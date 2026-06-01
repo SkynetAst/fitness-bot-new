@@ -27,3 +27,30 @@ def init_db() -> None:
             )
         """)
         conn.commit()
+
+
+def get_user(user_id: int) -> dict | None:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        row = conn.execute(
+            "SELECT * FROM users WHERE user_id = ?", (user_id,)
+        ).fetchone()
+        return dict(row) if row else None
+
+
+def save_user(user_id: int, height: float, weight: float,
+              age: int, gender: str, goal: str) -> None:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """INSERT OR REPLACE INTO users
+               (user_id, height, weight, age, gender, goal)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (user_id, height, weight, age, gender, goal),
+        )
+        conn.commit()
+
+
+def delete_user(user_id: int) -> None:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+        conn.commit()

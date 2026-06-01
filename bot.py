@@ -1,21 +1,21 @@
 import os
 from dotenv import load_dotenv
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler
 from database import init_db
+from onboarding import build_onboarding_handler
+from reset import cmd_reset, handle_reset_confirm, handle_reset_cancel
 
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("Привет! Я фитнес-бот 💪")
-
-
 def main() -> None:
     init_db()
     app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
+    app.add_handler(build_onboarding_handler())
+    app.add_handler(CommandHandler("reset", cmd_reset))
+    app.add_handler(CallbackQueryHandler(handle_reset_confirm, pattern="^reset_confirm$"))
+    app.add_handler(CallbackQueryHandler(handle_reset_cancel,  pattern="^reset_cancel$"))
     app.run_polling()
 
 
