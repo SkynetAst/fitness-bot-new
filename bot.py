@@ -6,6 +6,7 @@ from onboarding import build_onboarding_handler
 from reset import cmd_reset, handle_reset_confirm, handle_reset_cancel
 from profile import cmd_profile
 from training import cmd_train
+from today import cmd_today
 from food_diary import build_food_handler
 
 load_dotenv()
@@ -22,6 +23,7 @@ def main() -> None:
     app.add_handler(CallbackQueryHandler(handle_reset_cancel,  pattern="^reset_cancel$"))
     app.add_handler(CommandHandler("profile", cmd_profile))
     app.add_handler(CommandHandler("train", cmd_train))
+    app.add_handler(CommandHandler("today", cmd_today))
     app.run_polling()
 
 

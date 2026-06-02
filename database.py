@@ -65,6 +65,16 @@ def delete_user(user_id: int) -> None:
         conn.commit()
 
 
+def get_today_entries(user_id: int, date: str) -> list:
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            "SELECT * FROM food_diary WHERE user_id = ? AND date = ?",
+            (user_id, date),
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+
 def add_food_entry(user_id: int, food_name: str, grams: float,
                    calories: int, date: str) -> None:
     with sqlite3.connect(DB_PATH) as conn:
