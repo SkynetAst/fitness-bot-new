@@ -9,6 +9,7 @@ from telegram.ext import (
 )
 from database import get_user, save_user, update_calories
 from kbzhu import calculate_kbzhu
+from help import HELP_TEXT
 
 HEIGHT, WEIGHT, AGE, GENDER, GOAL = range(5)
 
@@ -114,8 +115,8 @@ async def finish_onboarding(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> i
     kbzhu = calculate_kbzhu(ud["height"], ud["weight"], ud["age"], ud["gender"], goal_str)
     update_calories(user_id, kbzhu["calories"])
     await query.edit_message_text(
-        "Отлично! Твои данные сохранены.\n"
-        "Напиши /profile чтобы увидеть свой профиль."
+        "🎉 Ты настроен! Твои данные сохранены.\n\n"
+        + HELP_TEXT
     )
     return ConversationHandler.END
 
