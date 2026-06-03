@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler
+from telegram.ext import Application, ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from database import init_db
 from onboarding import build_onboarding_handler
 from reset import cmd_reset, handle_reset_confirm, handle_reset_cancel
@@ -9,6 +9,7 @@ from training import cmd_train
 from today import cmd_today
 from food_diary import build_food_handler
 from help import cmd_help
+from gemini import handle_gemini
 
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -38,6 +39,7 @@ def main() -> None:
     app.add_handler(CommandHandler("train", cmd_train))
     app.add_handler(CommandHandler("today", cmd_today))
     app.add_handler(CommandHandler("help", cmd_help))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_gemini))
     app.run_polling()
 
 
