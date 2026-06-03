@@ -22,7 +22,7 @@ async def cmd_profile(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     text = (
         "👤 Твой профиль:\n\n"
         f"📏 Рост: {user['height']:.0f} см\n"
-        f"⚖️ Вес: {user['weight']:.1f} кг\n"
+        f"⚖️ Вес: {user['weight']:.0f} кг\n"
         f"🎂 Возраст: {user['age']} лет\n"
         f"🚻 Пол: {user['gender'].capitalize()}\n"
         f"🎯 Цель: {_GOAL_DISPLAY.get(user['goal'], user['goal'])}\n\n"
