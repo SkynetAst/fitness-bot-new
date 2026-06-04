@@ -4,7 +4,13 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-_model = genai.GenerativeModel("gemini-3.1-flash-lite")
+_SYSTEM = (
+    "Ты — фитнес-ассистент в Telegram-боте. Помогаешь пользователям с вопросами "
+    "о питании, КБЖУ (калории, белки, жиры, углеводы), тренировках и здоровом образе "
+    "жизни. Отвечай кратко и по делу — это мессенджер, не статья. "
+    "Если вопрос не про фитнес или питание — мягко напомни, чем занимаешься."
+)
+_model = genai.GenerativeModel("gemini-3.1-flash-lite", system_instruction=_SYSTEM)
 
 
 async def handle_gemini(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
