@@ -21,7 +21,8 @@ async def handle_reset_confirm(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -
     delete_user(user_id)
     conv_key = (user_id, user_id)
     for handler in ctx.bot_data.get("conv_handlers", []):
-        handler.conversations.pop(conv_key, None)
+        # _conversations — приватный атрибут PTB, нет публичного API сброса; перепроверить при апгрейде PTB.
+        handler._conversations.pop(conv_key, None)
     await query.edit_message_text(
         "Данные удалены. Напиши /start чтобы начать заново."
     )
