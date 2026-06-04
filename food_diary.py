@@ -10,6 +10,7 @@ from telegram.ext import (
     filters,
 )
 from database import add_food_entry
+from cancel import cmd_cancel
 
 ASK_FOOD, ASK_GRAMS, ASK_CUSTOM_GRAMS = range(3)
 
@@ -156,5 +157,5 @@ def build_food_handler() -> ConversationHandler:
             ASK_GRAMS:        [CallbackQueryHandler(handle_grams, pattern="^grams_")],
             ASK_CUSTOM_GRAMS: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_custom_grams)],
         },
-        fallbacks=[CommandHandler("cancel", cancel_food)],
+        fallbacks=[CommandHandler("cancel", cmd_cancel)],
     )

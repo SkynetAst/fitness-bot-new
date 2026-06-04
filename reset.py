@@ -17,7 +17,11 @@ async def cmd_reset(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
 async def handle_reset_confirm(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     await query.answer()
-    delete_user(query.from_user.id)
+    user_id = query.from_user.id
+    delete_user(user_id)
+    conv_key = (user_id, user_id)
+    for handler in ctx.bot_data.get("conv_handlers", []):
+        handler.conversations.pop(conv_key, None)
     await query.edit_message_text(
         "Данные удалены. Напиши /start чтобы начать заново."
     )

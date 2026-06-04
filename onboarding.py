@@ -10,6 +10,7 @@ from telegram.ext import (
 from database import get_user, save_user, update_calories
 from kbzhu import calculate_kbzhu
 from help import HELP_TEXT
+from cancel import cmd_cancel
 
 HEIGHT, WEIGHT, AGE, GENDER, GOAL = range(5)
 
@@ -136,5 +137,6 @@ def build_onboarding_handler() -> ConversationHandler:
             GENDER: [CallbackQueryHandler(ask_goal,           pattern="^gender_")],
             GOAL:   [CallbackQueryHandler(finish_onboarding,  pattern="^goal_")],
         },
-        fallbacks=[CommandHandler("cancel", _cancel)],
+        fallbacks=[CommandHandler("cancel", cmd_cancel)],
+        allow_reentry=True,
     )

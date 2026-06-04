@@ -9,6 +9,7 @@ from training import cmd_train
 from today import cmd_today
 from food_diary import build_food_handler
 from help import cmd_help
+from cancel import cmd_cancel
 from gemini import handle_gemini
 
 load_dotenv()
@@ -23,6 +24,7 @@ async def post_init(app: Application) -> None:
         ("today",   "Сводка питания за сегодня"),
         ("train",   "План тренировок"),
         ("reset",   "Сбросить профиль"),
+        ("cancel",  "Отменить текущее действие"),
         ("help",    "Список команд"),
     ])
 
@@ -30,8 +32,11 @@ async def post_init(app: Application) -> None:
 def main() -> None:
     init_db()
     app = ApplicationBuilder().token(TOKEN).post_init(post_init).build()
-    app.add_handler(build_onboarding_handler())
-    app.add_handler(build_food_handler())
+    onboarding_h = build_onboarding_handler()
+    food_h = build_food_handler()
+    app.add_handler(onboarding_h)
+    app.add_handler(food_h)
+    app.bot_data["conv_handlers"] = [onboarding_h, food_h]
     app.add_handler(CommandHandler("reset", cmd_reset))
     app.add_handler(CallbackQueryHandler(handle_reset_confirm, pattern="^reset_confirm$"))
     app.add_handler(CallbackQueryHandler(handle_reset_cancel,  pattern="^reset_cancel$"))
@@ -39,6 +44,7 @@ def main() -> None:
     app.add_handler(CommandHandler("train", cmd_train))
     app.add_handler(CommandHandler("today", cmd_today))
     app.add_handler(CommandHandler("help", cmd_help))
+    app.add_handler(CommandHandler("cancel", cmd_cancel))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_gemini))
     app.run_polling()
 
