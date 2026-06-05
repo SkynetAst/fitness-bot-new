@@ -8,8 +8,10 @@ Telegram-бот: онбординг пользователя → расчёт К
 ## Стек
 - Python 3.14
 - python-telegram-bot 22.x (async)
-- SQLite (база данных)
+- PostgreSQL (база данных) + psycopg2-binary
 - python-dotenv (токен из .env)
+- google-generativeai
+- модуль gemini.py, ключ из GEMINI_API_KEY, не трогать system_instruction без явного запроса
 
 ## Правила
 - Токен только из переменной TELEGRAM_TOKEN
@@ -17,7 +19,7 @@ Telegram-бот: онбординг пользователя → расчёт К
 - Имена файлов, папок, функций — латиницей (английский)
 - Всегда UTF-8 для корректного отображения в Windows
 - Многошаговые диалоги — через ConversationHandler
-- БД: SQLite, таблицы users и food_diary
+- БД: PostgreSQL + таблицы users и food_diary + подключение через DATABASE_URL
 - Перед финальным ответом — тестируй запуском
 - Не устанавливай пакеты без явного запроса
 
@@ -34,3 +36,4 @@ Telegram-бот: онбординг пользователя → расчёт К
 ## Запреты
 - Не изменять .env
 - Не коммитить .env (он в .gitignore)
+- DATABASE_URL (не менять вручную, только через Railway Variables)
