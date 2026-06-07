@@ -10,6 +10,7 @@ from today import cmd_today
 from food_diary import build_food_handler
 from help import cmd_help
 from cancel import cmd_cancel
+from ask import cmd_ask
 from gemini import handle_gemini
 
 load_dotenv()
@@ -25,6 +26,7 @@ async def post_init(app: Application) -> None:
         ("train",   "План тренировок"),
         ("reset",   "Сбросить профиль"),
         ("cancel",  "Отменить текущее действие"),
+        ("ask",     "Вопрос о студии FitLife"),
         ("help",    "Список команд"),
     ])
 
@@ -45,6 +47,7 @@ def main() -> None:
     app.add_handler(CommandHandler("today", cmd_today))
     app.add_handler(CommandHandler("help", cmd_help))
     app.add_handler(CommandHandler("cancel", cmd_cancel))
+    app.add_handler(CommandHandler("ask", cmd_ask))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_gemini))
     app.run_polling()
 
